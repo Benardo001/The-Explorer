@@ -5,17 +5,18 @@
 </head>
 <body>
 
-<h1>🌴 CoastExplorer Beaches</h1>
+<h1>🌴 Welcome, {{ request.user.username }}</h1>
+
+<a href="/logout/">Logout</a>
+
+<hr>
 
 {% for beach in beaches %}
     <div>
         <h2>{{ beach.name }}</h2>
         <p>{{ beach.location }}</p>
         <p>{{ beach.description }}</p>
-        <p><strong>Activities:</strong> {{ beach.activities }}</p>
-        <p><strong>Price:</strong> Ksh {{ beach.price }}</p>
     </div>
-    <hr>
 {% endfor %}
 
 </body>
