@@ -1,23 +1,331 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoastExplorer</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            background:#f5f7fa;
+            color:#333;
+        }
+
+        /* NAVBAR */
+
+        nav{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:20px 8%;
+            background:#0077b6;
+            color:white;
+        }
+
+        nav h1{
+            font-size:28px;
+        }
+
+        nav ul{
+            display:flex;
+            list-style:none;
+            gap:20px;
+        }
+
+        nav ul li a{
+            color:white;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        nav ul li a:hover{
+            color:#caf0f8;
+        }
+
+        /* HERO SECTION */
+
+        .hero{
+            height:90vh;
+            background:
+            linear-gradient(rgba(0,0,0,0.5),
+            rgba(0,0,0,0.5)),
+            url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e')
+            center/cover no-repeat;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            color:white;
+            padding:20px;
+        }
+
+        .hero-content h2{
+            font-size:60px;
+            margin-bottom:20px;
+        }
+
+        .hero-content p{
+            font-size:20px;
+            margin-bottom:30px;
+        }
+
+        .hero-content button{
+            padding:15px 30px;
+            border:none;
+            background:#00b4d8;
+            color:white;
+            font-size:18px;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        .hero-content button:hover{
+            background:#0077b6;
+        }
+
+        /* BEACH SECTION */
+
+        .section-title{
+            text-align:center;
+            margin:60px 0 30px;
+            font-size:36px;
+            color:#0077b6;
+        }
+
+        .beach-container{
+            display:flex;
+            justify-content:center;
+            flex-wrap:wrap;
+            gap:30px;
+            padding:20px 8%;
+        }
+
+        .card{
+            background:white;
+            width:300px;
+            border-radius:15px;
+            overflow:hidden;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-10px);
+        }
+
+        .card img{
+            width:100%;
+            height:200px;
+            object-fit:cover;
+        }
+
+        .card-content{
+            padding:20px;
+        }
+
+        .card-content h3{
+            margin-bottom:10px;
+            color:#0077b6;
+        }
+
+        .card-content p{
+            margin-bottom:15px;
+        }
+
+        .card-content button{
+            padding:10px 20px;
+            border:none;
+            background:#0077b6;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        .card-content button:hover{
+            background:#023e8a;
+        }
+
+        /* ABOUT SECTION */
+
+        .about{
+            padding:80px 10%;
+            text-align:center;
+            background:white;
+            margin-top:60px;
+        }
+
+        .about h2{
+            margin-bottom:20px;
+            color:#0077b6;
+        }
+
+        .about p{
+            max-width:700px;
+            margin:auto;
+            line-height:1.8;
+        }
+
+        /* FOOTER */
+
+        footer{
+            background:#0077b6;
+            color:white;
+            text-align:center;
+            padding:20px;
+            margin-top:50px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:768px){
+
+            nav{
+                flex-direction:column;
+                gap:15px;
+            }
+
+            .hero-content h2{
+                font-size:40px;
+            }
+
+            .hero-content p{
+                font-size:16px;
+            }
+
+        }
+
+    </style>
+
 </head>
 <body>
 
-<h1>🌴 Welcome, {{ request.user.username }}</h1>
+    <!-- NAVBAR -->
 
-<a href="/logout/">Logout</a>
+    <nav>
+        <h1>🌴 CoastExplorer</h1>
 
-<hr>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Beaches</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
 
-{% for beach in beaches %}
-    <div>
-        <h2>{{ beach.name }}</h2>
-        <p>{{ beach.location }}</p>
-        <p>{{ beach.description }}</p>
-    </div>
-{% endfor %}
+    <!-- HERO SECTION -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h2>Explore Kenya’s Best Beaches</h2>
+
+            <p>
+                Discover amazing coastal destinations,
+                activities and tourism experiences.
+            </p>
+
+            <button>Explore Now</button>
+
+        </div>
+
+    </section>
+
+    <!-- BEACHES -->
+
+    <h2 class="section-title">Popular Beaches</h2>
+
+    <section class="beach-container">
+
+        <div class="card">
+
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+
+            <div class="card-content">
+
+                <h3>Diani Beach</h3>
+
+                <p>
+                    White sands, luxury resorts and water sports.
+                </p>
+
+                <button>View More</button>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img src="https://images.unsplash.com/photo-1493558103817-58b2924bce98">
+
+            <div class="card-content">
+
+                <h3>Nyali Beach</h3>
+
+                <p>
+                    A beautiful beach destination in Mombasa.
+                </p>
+
+                <button>View More</button>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21">
+
+            <div class="card-content">
+
+                <h3>Bamburi Beach</h3>
+
+                <p>
+                    Perfect for relaxation and beach activities.
+                </p>
+
+                <button>View More</button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ABOUT -->
+
+    <section class="about">
+
+        <h2>About CoastExplorer</h2>
+
+        <p>
+            CoastExplorer is a tourism platform designed to help
+            travelers discover the best beaches and tourism
+            experiences in Kenya. Our mission is to make travel
+            planning simple, enjoyable and accessible.
+        </p>
+
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            © 2026 CoastExplorer | All Rights Reserved
+        </p>
+
+    </footer>
 
 </body>
 </html>
