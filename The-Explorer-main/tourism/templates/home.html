@@ -329,3 +329,307 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Beach Cards</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#f4f7fb;
+            padding:50px 8%;
+        }
+
+        .title{
+            text-align:center;
+            margin-bottom:50px;
+            font-size:40px;
+            color:#0077b6;
+        }
+
+        /* CARD CONTAINER */
+
+        .card-container{
+
+            display:flex;
+
+            justify-content:center;
+
+            gap:30px;
+
+            flex-wrap:wrap;
+        }
+
+        /* CARD */
+
+        .card{
+
+            width:320px;
+
+            background:white;
+
+            border-radius:20px;
+
+            overflow:hidden;
+
+            box-shadow:0 10px 25px rgba(0,0,0,0.1);
+
+            transition:0.4s;
+
+            position:relative;
+        }
+
+        .card:hover{
+
+            transform:translateY(-12px);
+
+            box-shadow:0 20px 35px rgba(0,0,0,0.2);
+        }
+
+        /* IMAGE */
+
+        .card img{
+
+            width:100%;
+
+            height:220px;
+
+            object-fit:cover;
+        }
+
+        /* BADGE */
+
+        .badge{
+
+            position:absolute;
+
+            top:15px;
+            left:15px;
+
+            background:#00b4d8;
+
+            color:white;
+
+            padding:8px 14px;
+
+            border-radius:30px;
+
+            font-size:14px;
+
+            font-weight:bold;
+        }
+
+        /* CONTENT */
+
+        .card-content{
+
+            padding:25px;
+        }
+
+        .card-content h2{
+
+            color:#0077b6;
+
+            margin-bottom:12px;
+        }
+
+        .location{
+
+            color:gray;
+
+            margin-bottom:15px;
+
+            font-size:14px;
+        }
+
+        .description{
+
+            line-height:1.6;
+
+            margin-bottom:20px;
+        }
+
+        /* FOOTER */
+
+        .card-footer{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+        }
+
+        .price{
+
+            font-size:22px;
+
+            font-weight:bold;
+
+            color:#023e8a;
+        }
+
+        .btn{
+
+            background:#0077b6;
+
+            color:white;
+
+            border:none;
+
+            padding:12px 18px;
+
+            border-radius:10px;
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        .btn:hover{
+
+            background:#023e8a;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:768px){
+
+            body{
+                padding:30px 5%;
+            }
+
+            .title{
+                font-size:30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <h1 class="title">🌴 Popular Beaches</h1>
+
+    <div class="card-container">
+
+        <!-- CARD 1 -->
+
+        <div class="card">
+
+            <span class="badge">Top Rated</span>
+
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+
+            <div class="card-content">
+
+                <h2>Diani Beach</h2>
+
+                <p class="location">
+                    📍 Kwale County, Kenya
+                </p>
+
+                <p class="description">
+                    Famous for white sands, luxury resorts,
+                    snorkeling and vibrant beach nightlife.
+                </p>
+
+                <div class="card-footer">
+
+                    <span class="price">$120</span>
+
+                    <button class="btn">
+                        Explore
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD 2 -->
+
+        <div class="card">
+
+            <span class="badge">Adventure</span>
+
+            <img src="https://images.unsplash.com/photo-1493558103817-58b2924bce98">
+
+            <div class="card-content">
+
+                <h2>Nyali Beach</h2>
+
+                <p class="location">
+                    📍 Mombasa, Kenya
+                </p>
+
+                <p class="description">
+                    Perfect destination for family vacations,
+                    water sports and ocean adventures.
+                </p>
+
+                <div class="card-footer">
+
+                    <span class="price">$90</span>
+
+                    <button class="btn">
+                        Explore
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD 3 -->
+
+        <div class="card">
+
+            <span class="badge">Relaxation</span>
+
+            <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21">
+
+            <div class="card-content">
+
+                <h2>Bamburi Beach</h2>
+
+                <p class="location">
+                    📍 Mombasa County, Kenya
+                </p>
+
+                <p class="description">
+                    Calm atmosphere, luxury hotels and amazing
+                    sunset experiences by the ocean.
+                </p>
+
+                <div class="card-footer">
+
+                    <span class="price">$110</span>
+
+                    <button class="btn">
+                        Explore
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
