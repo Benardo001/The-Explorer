@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | CoastExplorer</title>
+    <style>
+        body{font-family:'Segoe UI',sans-serif;background:#f8fafc;color:#0f172a;padding:30px;}
+        .container{max-width:900px;margin:auto;}
+        h1{color:#0369a1;margin-bottom:20px;}
+        .booking{background:#fff;padding:20px;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.08);margin-bottom:18px;}
+        .booking h2{margin-bottom:8px;color:#0f172a;}
+        .meta{color:#475569;}
+        a{color:#2563eb;text-decoration:none;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>My Bookings</h1>
+    {% if bookings %}
+        {% for booking in bookings %}
+            <div class="booking">
+                <h2>{{ booking.beach.name }}</h2>
+                <p class="meta">Check-in: {{ booking.check_in }} · Check-out: {{ booking.check_out }} · Guests: {{ booking.guests }}</p>
+                <p class="meta">Booked on {{ booking.created_at|date:'M d, Y' }}</p>
+                <p><a href="{% url 'beach_detail' booking.beach.id %}">View beach details</a></p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You have no bookings yet. <a href="{% url 'home' %}">Browse beaches</a>.</p>
+    {% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | CoastExplorer</title>
+    <style>
+        body{margin:0;font-family:'Segoe UI',sans-serif;background:#e0f2fe;color:#0f172a;display:flex;align-items:center;justify-content:center;height:100vh;}
+        .box{background:#fff;padding:36px;border-radius:24px;box-shadow:0 20px 60px rgba(15,23,42,.12);width:100%;max-width:420px;}
+        h2{color:#0369a1;margin-bottom:20px;}
+        form{display:grid;gap:16px;}
+        input{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:14px;}
+        button{padding:14px;border:none;border-radius:14px;background:#0077b6;color:white;font-weight:700;cursor:pointer;}
+        button:hover{background:#0369a1;}
+        a{color:#2563eb;text-decoration:none;font-size:14px;}
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2>Create an Account</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sign Up</button>
+    </form>
+    <p style="margin-top:16px;">Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+</div>
+</body>
+</html>

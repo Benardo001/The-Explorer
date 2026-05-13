@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review {{ beach.name }} | CoastExplorer</title>
+    <style>
+        body{font-family:'Segoe UI',sans-serif;background:#f8fafc;color:#0f172a;padding:30px;}
+        .card{max-width:650px;margin:auto;background:#fff;padding:28px;border-radius:20px;box-shadow:0 20px 56px rgba(15,23,42,.08);}
+        h1{margin-bottom:16px;color:#0369a1;}
+        form{display:grid;gap:18px;}
+        textarea,input{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:14px;}
+        button{padding:14px;border:none;border-radius:14px;background:#0077b6;color:white;font-weight:700;cursor:pointer;}
+        button:hover{background:#0369a1;}
+        a{color:#2563eb;text-decoration:none;}
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Leave a Review for {{ beach.name }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Review</button>
+    </form>
+    <p style="margin-top:18px;"><a href="{% url 'beach_detail' beach.id %}">← Back to beach</a></p>
+</div>
+</body>
+</html>

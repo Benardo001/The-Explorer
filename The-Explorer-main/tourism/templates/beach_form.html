@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - CoastExplorer</title>
+    <style>
+        body{font-family:'Segoe UI',sans-serif;background:#eff6ff;color:#0f172a;padding:30px;}
+        .container{max-width:700px;margin:auto;background:#fff;padding:28px;border-radius:20px;box-shadow:0 24px 60px rgba(15,23,42,.08);}
+        h1{margin-bottom:22px;color:#0369a1;}
+        form{display:grid;gap:18px;}
+        input,textarea,select{width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:14px;outline:none;}
+        button{width:100%;padding:14px;border:none;border-radius:14px;background:#0077b6;color:white;font-weight:700;cursor:pointer;}
+        button:hover{background:#0369a1;}
+        .links{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:18px;}
+        .links a{color:#0f172a;text-decoration:none;font-weight:700;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>{{ title }}</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Beach</button>
+    </form>
+    <div class="links">
+        <a href="{% url 'home' %}">← Back to Home</a>
+        {% if title == 'Edit Beach' and form.instance.pk %}
+            <a href="{% url 'beach_detail' form.instance.pk %}">View Beach</a>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book {{ beach.name }} | CoastExplorer</title>
+    <style>
+        body{font-family:'Segoe UI',sans-serif;background:#eef2ff;color:#111827;padding:30px;}
+        .card{max-width:600px;margin:auto;background:#fff;padding:28px;border-radius:20px;box-shadow:0 18px 50px rgba(15,23,42,.08);}
+        h1{color:#0f172a;margin-bottom:18px;}
+        .details{margin-bottom:22px;color:#475569;}
+        form{display:grid;gap:18px;}
+        input,button{padding:14px;border-radius:14px;border:1px solid #cbd5e1;}
+        button{background:#0077b6;color:white;border:none;cursor:pointer;font-weight:700;}
+        button:hover{background:#0369a1;}
+        a{color:#2563eb;text-decoration:none;}
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Book {{ beach.name }}</h1>
+    <p class="details">Location: {{ beach.location }} · Price: Ksh {{ beach.price }}</p>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Confirm Booking</button>
+    </form>
+    <p style="margin-top:18px;"><a href="{% url 'beach_detail' beach.id %}">← Back to beach details</a></p>
+</div>
+</body>
+</html>
