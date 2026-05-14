@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ accommodation.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            {% if accommodation.image %}
+                <img src="{{ accommodation.image.url }}" class="img-fluid mb-4" alt="{{ accommodation.name }}" style="max-height: 500px; object-fit: cover;">
+            {% endif %}
+
+            <h1>{{ accommodation.name }}</h1>
+            <p class="text-muted mb-3">
+                <i class="fas fa-map-marker-alt"></i> {{ accommodation.location }}
+            </p>
+
+            <div class="mb-3">
+                <span class="badge badge-info">{{ accommodation.get_accommodation_type_display }}</span>
+            </div>
+
+            <h3>About</h3>
+            <p>{{ accommodation.description }}</p>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Price per Night</h5>
+                    <p class="h4">KES {{ accommodation.price_per_night }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Maximum Guests</h5>
+                    <p>{{ accommodation.max_guests }} guests</p>
+                </div>
+            </div>
+
+            {% if accommodation.amenities %}
+                <div class="mb-4">
+                    <h5>Amenities</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for amenity in accommodation.get_amenities_list %}
+                            <span class="badge badge-light">{{ amenity }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if accommodation.contact_info %}
+                <div class="mb-4">
+                    <h5>Contact Information</h5>
+                    <p>{{ accommodation.contact_info }}</p>
+                </div>
+            {% endif %}
+
+            {% if accommodation.website %}
+                <div class="mb-4">
+                    <h5>Website</h5>
+                    <p><a href="{{ accommodation.website }}" target="_blank" rel="noopener noreferrer">{{ accommodation.website }}</a></p>
+                </div>
+            {% endif %}
+
+            {% if accommodation.latitude and accommodation.longitude %}
+                <div class="mb-4">
+                    <h5>Location Coordinates</h5>
+                    <p>
+                        <small class="text-muted">
+                            Latitude: {{ accommodation.latitude }}<br>
+                            Longitude: {{ accommodation.longitude }}
+                        </small>
+                    </p>
+                </div>
+            {% endif %}
+
+            <div class="btn-group mb-4" role="group">
+                <a href="{% url 'update_accommodation' accommodation.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'delete_accommodation' accommodation.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'accommodations' %}" class="btn btn-secondary">Back to Accommodations</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Accommodation Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Type:</strong> {{ accommodation.get_accommodation_type_display }}</p>
+                    <p><strong>Location:</strong> {{ accommodation.location }}</p>
+                    <p><strong>Price per Night:</strong> KES {{ accommodation.price_per_night }}</p>
+                    <p><strong>Maximum Guests:</strong> {{ accommodation.max_guests }}</p>
+                    {% if accommodation.contact_info %}
+                        <p><strong>Contact:</strong> {{ accommodation.contact_info }}</p>
+                    {% endif %}
+                    {% if accommodation.website %}
+                        <p><strong>Website:</strong> <a href="{{ accommodation.website }}" target="_blank" rel="noopener noreferrer">Visit</a></p>
+                    {% endif %}
+                    <p><small class="text-muted">Added on {{ accommodation.created_at|date:"F d, Y" }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

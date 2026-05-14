@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import BeachForm, BookingForm, ReviewForm, SignupForm
-from .models import Beach, Booking, Review
+from .forms import BeachForm, BookingForm, ReviewForm, SignupForm, AttractionForm, AccommodationForm
+from .models import Beach, Booking, Review, TouristAttraction, Accommodation
 
 
 def signup_view(request):
@@ -126,6 +126,122 @@ def add_review(request, id):
 def my_bookings(request):
     bookings = Booking.objects.filter(user=request.user).select_related('beach')
     return render(request, 'my_bookings.html', {'bookings': bookings})
+
+
+@login_required
+def attractions(request):
+    query = request.GET.get('q', '')
+    category = request.GET.get('category', '')
+    attractions_list = TouristAttraction.objects.all()
+    
+    if query:
+        attractions_list = attractions_list.filter(name__icontains=query) | attractions_list.filter(location__icontains=query)
+    
+    if category:
+        attractions_list = attractions_list.filter(category=category)
+    
+    categories = TouristAttraction.CATEGORY_CHOICES
+    return render(request, 'attractions.html', {
+        'attractions': attractions_list,
+        'categories': categories,
+        'query': query,
+        'selected_category': category,
+    })
+
+
+@login_required
+def attraction_detail(request, id):
+    attraction = get_object_or_404(TouristAttraction, id=id)
+    return render(request, 'attraction_detail.html', {'attraction': attraction})
+
+
+@login_required
+def create_attraction(request):
+    form = AttractionForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Tourist attraction added successfully.')
+        return redirect('attractions')
+    return render(request, 'attraction_form.html', {'form': form, 'title': 'Add Tourist Attraction'})
+
+
+@login_required
+def update_attraction(request, id):
+    attraction = get_object_or_404(TouristAttraction, id=id)
+    form = AttractionForm(request.POST or None, request.FILES or None, instance=attraction)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Tourist attraction updated successfully.')
+        return redirect('attraction_detail', id=attraction.id)
+    return render(request, 'attraction_form.html', {'form': form, 'title': 'Edit Tourist Attraction'})
+
+
+@login_required
+def delete_attraction(request, id):
+    attraction = get_object_or_404(TouristAttraction, id=id)
+    if request.method == 'POST':
+        attraction.delete()
+        messages.success(request, 'Tourist attraction deleted successfully.')
+        return redirect('attractions')
+    return render(request, 'confirm_delete.html', {'object': attraction, 'type': 'attraction'})
+
+
+@login_required
+def accommodations(request):
+    query = request.GET.get('q', '')
+    accommodation_type = request.GET.get('type', '')
+    accommodations_list = Accommodation.objects.all()
+    
+    if query:
+        accommodations_list = accommodations_list.filter(name__icontains=query) | accommodations_list.filter(location__icontains=query)
+    
+    if accommodation_type:
+        accommodations_list = accommodations_list.filter(accommodation_type=accommodation_type)
+    
+    types = Accommodation.ACCOMMODATION_TYPE_CHOICES
+    return render(request, 'accommodations.html', {
+        'accommodations': accommodations_list,
+        'types': types,
+        'query': query,
+        'selected_type': accommodation_type,
+    })
+
+
+@login_required
+def accommodation_detail(request, id):
+    accommodation = get_object_or_404(Accommodation, id=id)
+    return render(request, 'accommodation_detail.html', {'accommodation': accommodation})
+
+
+@login_required
+def create_accommodation(request):
+    form = AccommodationForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Accommodation added successfully.')
+        return redirect('accommodations')
+    return render(request, 'accommodation_form.html', {'form': form, 'title': 'Add Accommodation'})
+
+
+@login_required
+def update_accommodation(request, id):
+    accommodation = get_object_or_404(Accommodation, id=id)
+    form = AccommodationForm(request.POST or None, request.FILES or None, instance=accommodation)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Accommodation updated successfully.')
+        return redirect('accommodation_detail', id=accommodation.id)
+    return render(request, 'accommodation_form.html', {'form': form, 'title': 'Edit Accommodation'})
+
+
+@login_required
+def delete_accommodation(request, id):
+    accommodation = get_object_or_404(Accommodation, id=id)
+    if request.method == 'POST':
+        accommodation.delete()
+        messages.success(request, 'Accommodation deleted successfully.')
+        return redirect('accommodations')
+    return render(request, 'confirm_delete.html', {'object': accommodation, 'type': 'accommodation'})
 
 
 def logout_view(request):

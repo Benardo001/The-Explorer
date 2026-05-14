@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Tourist Attractions in Kenya{% endblock %}
+
+{% block extra_css %}
+<style>
+    .attractions-header {
+        padding: 40px 5%;
+        background: linear-gradient(135deg, rgba(3, 105, 161, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .attractions-header h1 {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--primary-blue);
+        margin: 0;
+    }
+
+    .filter-section {
+        padding: 25px 5%;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter-section form {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .filter-section input,
+    .filter-section select {
+        padding: 11px 14px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        outline: none;
+        font-size: 14px;
+        background: var(--light-bg);
+        transition: all 0.3s ease;
+    }
+
+    .filter-section input:focus,
+    .filter-section select:focus {
+        border-color: var(--accent-cyan);
+        background: var(--white);
+        box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+    }
+
+    .badge {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+        color: var(--white);
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 60px 5%;
+        color: var(--text-muted);
+    }
+
+    .empty-message h3 {
+        font-size: 22px;
+        color: var(--text-dark);
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="attractions-header">
+    <h1>🎯 Tourist Attractions in Kenya</h1>
+    <a href="{% url 'create_attraction' %}" class="add-btn">+ Add Attraction</a>
+</div>
+
+<!-- Filter & Search Section -->
+<div class="filter-section">
+    <form method="GET" action="{% url 'attractions' %}" style="flex: 1; display: flex; gap: 12px; min-width: 300px;">
+        <input type="text" name="q" placeholder="🔍 Search attractions..." value="{{ query }}" style="flex: 1;">
+        <button type="submit" style="padding: 11px 20px;">Search</button>
+    </form>
+
+    <form method="GET" action="{% url 'attractions' %}" style="display: flex; gap: 12px; align-items: center;">
+        <select name="category" onchange="this.form.submit()" style="min-width: 180px;">
+            <option value="">All Categories</option>
+            {% for value, label in categories %}
+                <option value="{{ value }}" {% if value == selected_category %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<!-- Messages -->
+{% if messages %}
+    <div class="message">
+        {% for message in messages %}
+            <div>{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Attractions Grid -->
+{% if attractions %}
+    <div class="grid">
+        {% for attraction in attractions %}
+            <div class="card">
+                {% if attraction.image %}
+                    <img src="{{ attraction.image.url }}" alt="{{ attraction.name }}">
+                {% else %}
+                    <div style="height: 240px; background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%); display: flex; align-items: center; justify-content: center;">
+                        <span style="color: var(--text-dark); font-size: 14px;">🎪 No Image</span>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h2>{{ attraction.name }}</h2>
+                    <div class="meta">
+                        <span>📍 {{ attraction.location }}</span>
+                    </div>
+                    <p>{{ attraction.description|truncatewords:15 }}</p>
+                    <div style="margin: 12px 0;">
+                        <span class="badge">{{ attraction.get_category_display }}</span>
+                    </div>
+                    <div class="price">KES {{ attraction.entry_fee }}</div>
+                    <div class="card-actions">
+                        <a href="{% url 'attraction_detail' attraction.id %}">Details</a>
+                        <a href="{% url 'update_attraction' attraction.id %}" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">Edit</a>
+                        <a href="{% url 'delete_attraction' attraction.id %}" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-message">
+        <h3>🔍 No attractions found</h3>
+        <p>Try adjusting your search filters or add a new attraction.</p>
+    </div>
+{% endif %}
+
+{% endblock %}

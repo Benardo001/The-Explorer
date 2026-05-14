@@ -39,3 +39,66 @@ class Review(models.Model):
     def __str__(self):
         username = self.user.username if self.user else 'Anonymous'
         return f"{username} ({self.rating})"
+
+
+class TouristAttraction(models.Model):
+    CATEGORY_CHOICES = [
+        ('national_park', 'National Park'),
+        ('wildlife', 'Wildlife Reserve'),
+        ('cultural', 'Cultural Site'),
+        ('mountain', 'Mountain'),
+        ('waterfall', 'Waterfall'),
+        ('island', 'Island'),
+        ('historical', 'Historical Site'),
+        ('other', 'Other'),
+    ]
+
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    description = models.TextField()
+    entry_fee = models.IntegerField(default=0)
+    best_time_to_visit = models.CharField(max_length=200, blank=True)
+    image = models.ImageField(upload_to='attraction_images/', blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name
+
+
+class Accommodation(models.Model):
+    ACCOMMODATION_TYPE_CHOICES = [
+        ('hotel', 'Hotel'),
+        ('resort', 'Resort'),
+        ('guesthouse', 'Guesthouse'),
+        ('apartment', 'Apartment'),
+        ('villa', 'Villa'),
+        ('cottage', 'Cottage'),
+        ('camp', 'Camp'),
+        ('other', 'Other'),
+    ]
+
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    accommodation_type = models.CharField(max_length=20, choices=ACCOMMODATION_TYPE_CHOICES)
+    description = models.TextField()
+    price_per_night = models.IntegerField()
+    max_guests = models.IntegerField(default=2)
+    amenities = models.TextField(blank=True, help_text="Comma-separated list of amenities")
+    image = models.ImageField(upload_to='accommodation_images/', blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    contact_info = models.CharField(max_length=200, blank=True)
+    website = models.URLField(blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name
+
+    def get_amenities_list(self):
+        """Return amenities as a list"""
+        if self.amenities:
+            return [amenity.strip() for amenity in self.amenities.split(',')]
+        return []

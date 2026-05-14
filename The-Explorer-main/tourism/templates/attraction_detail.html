@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ attraction.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            {% if attraction.image %}
+                <img src="{{ attraction.image.url }}" class="img-fluid mb-4" alt="{{ attraction.name }}" style="max-height: 500px; object-fit: cover;">
+            {% endif %}
+
+            <h1>{{ attraction.name }}</h1>
+            <p class="text-muted mb-3">
+                <i class="fas fa-map-marker-alt"></i> {{ attraction.location }}
+            </p>
+
+            <div class="mb-3">
+                <span class="badge badge-info">{{ attraction.get_category_display }}</span>
+            </div>
+
+            <h3>About</h3>
+            <p>{{ attraction.description }}</p>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Entry Fee</h5>
+                    <p class="h4">KES {{ attraction.entry_fee }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Best Time to Visit</h5>
+                    <p>{{ attraction.best_time_to_visit|default:"Year-round" }}</p>
+                </div>
+            </div>
+
+            {% if attraction.latitude and attraction.longitude %}
+                <div class="mb-4">
+                    <h5>Location Coordinates</h5>
+                    <p>
+                        <small class="text-muted">
+                            Latitude: {{ attraction.latitude }}<br>
+                            Longitude: {{ attraction.longitude }}
+                        </small>
+                    </p>
+                </div>
+            {% endif %}
+
+            <div class="btn-group mb-4" role="group">
+                <a href="{% url 'update_attraction' attraction.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'delete_attraction' attraction.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'attractions' %}" class="btn btn-secondary">Back to Attractions</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Attraction Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Category:</strong> {{ attraction.get_category_display }}</p>
+                    <p><strong>Location:</strong> {{ attraction.location }}</p>
+                    <p><strong>Entry Fee:</strong> KES {{ attraction.entry_fee }}</p>
+                    <p><strong>Best Time to Visit:</strong> {{ attraction.best_time_to_visit|default:"Year-round" }}</p>
+                    <p><small class="text-muted">Added on {{ attraction.created_at|date:"F d, Y" }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

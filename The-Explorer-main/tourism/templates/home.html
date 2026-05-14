@@ -1,103 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoastExplorer</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-        body{background:#f2f7fb;color:#1f2937;}
-        nav{background:#0077b6;color:white;display:flex;justify-content:space-between;align-items:center;padding:18px 6%;flex-wrap:wrap;}
-        nav h1{font-size:28px;}
-        .nav-links{display:flex;gap:16px;flex-wrap:wrap;}
-        .nav-links a{color:white;text-decoration:none;background:rgba(255,255,255,0.15);padding:10px 16px;border-radius:10px;transition:0.2s;}
-        .nav-links a:hover{background:rgba(255,255,255,0.3);}
-        .hero{background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;min-height:380px;display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 8%;position:relative;}
-        .hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.45);}
-        .hero-content{position:relative;color:white;max-width:700px;z-index:1;}
-        .hero h1{font-size:48px;margin-bottom:18px;}
-        .hero p{font-size:18px;line-height:1.8;margin-bottom:24px;}
-        .hero a{display:inline-block;background:#00b4d8;color:white;padding:14px 26px;border-radius:12px;text-decoration:none;font-weight:700;}
-        .hero a:hover{background:#023e8a;}
-        .controls{padding:30px 8%;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center;}
-        .controls form{flex:1;min-width:260px;display:flex;gap:10px;}
-        .controls input{flex:1;padding:12px 16px;border:1px solid #cbd5e1;border-radius:12px;outline:none;}
-        .controls button{padding:12px 18px;border:none;background:#0077b6;color:white;border-radius:12px;cursor:pointer;}
-        .controls button:hover{background:#023e8a;}
-        .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px;padding:0 8% 40px;}
-        .card{background:white;border-radius:22px;overflow:hidden;box-shadow:0 18px 45px rgba(15,23,42,0.08);display:flex;flex-direction:column;}
-        .card img{width:100%;height:220px;object-fit:cover;}
-        .card-body{padding:24px;flex:1;}
-        .card-body h2{margin-bottom:10px;color:#0077b6;}
-        .card-body p{margin-bottom:14px;line-height:1.8;color:#475569;}
-        .meta{margin-bottom:18px;color:#64748b;font-size:14px;}
-        .price{font-size:22px;font-weight:700;color:#023e8a;margin-bottom:18px;}
-        .card-actions{display:flex;gap:10px;flex-wrap:wrap;padding:0 24px 24px;}
-        .card-actions a,.card-actions form button{flex:1;min-width:120px;text-align:center;text-decoration:none;border:none;color:white;background:#0077b6;padding:12px 14px;border-radius:12px;font-weight:700;cursor:pointer;}
-        .card-actions a:hover,.card-actions form button:hover{background:#023e8a;}
-        .message{max-width:800px;margin:20px auto 0;padding:16px 20px;background:#d1fae5;color:#065f46;border-radius:14px;border:1px solid #a7f3d0;}
-        footer{padding:24px 8%;text-align:center;color:#334155;font-size:14px;}
-        @media(max-width:720px){nav{flex-direction:column;align-items:flex-start;} .hero h1{font-size:36px;}}
-    </style>
-</head>
-<body>
-<nav>
-    <h1>🌴 CoastExplorer</h1>
-    <div class="nav-links">
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'create_beach' %}">Add Beach</a>
-        <a href="{% url 'my_bookings' %}">My Bookings</a>
-        <a href="{% url 'logout' %}">Logout</a>
-    </div>
-</nav>
+{% extends 'base.html' %}
+
+{% block title %}CoastExplorer - Discover Kenya's Best Beaches{% endblock %}
+
+{% block extra_css %}
+<style>
+    .section-header {
+        padding: 40px 5%;
+        text-align: center;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .section-header h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--primary-blue);
+        margin-bottom: 12px;
+    }
+
+    .section-header p {
+        color: var(--text-muted);
+        font-size: 16px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 5%;
+        color: var(--text-muted);
+    }
+
+    .empty-state h3 {
+        font-size: 24px;
+        color: var(--text-dark);
+        margin-bottom: 12px;
+    }
+
+    .add-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+        color: var(--white);
+        padding: 14px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+    }
+
+    .add-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .controls {
+        padding: 30px 5%;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 250px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .search-box input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+        border-color: var(--accent-cyan);
+        box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+    }
+
+    .search-box button {
+        padding: 12px 24px;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .search-box button:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
 <section class="hero">
     <div class="hero-content">
-        <h1>Discover Kenya’s Best Beaches</h1>
-        <p>Browse beach stays, book your next trip, add reviews, and manage coastal tourism offers from one dashboard.</p>
-        <a href="{% url 'create_beach' %}">Add New Beach</a>
+        <h1>🌊 Discover Kenya's Best Beaches</h1>
+        <p>Explore pristine coastal destinations, book your perfect getaway, share reviews, and manage tourism experiences from one elegant platform.</p>
+        <a href="#beaches">Explore Now</a>
     </div>
 </section>
+
 <div class="controls">
-    <form method="GET" action="{% url 'home' %}">
-        <input type="text" name="q" placeholder="Search beaches by name or location" value="{{ query }}">
-        <button type="submit">Search</button>
-    </form>
-</div>
-{% if messages %}
-    <div class="message">
-        {% for message in messages %}
-            <div>{{ message }}</div>
-        {% endfor %}
+    <div class="search-box">
+        <form method="GET" action="{% url 'home' %}" style="display: flex; gap: 10px; flex: 1;">
+            <input type="text" name="q" placeholder="🔍 Search beaches..." value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
     </div>
-{% endif %}
-<section class="grid">
-    {% for beach in beaches %}
-        <article class="card">
-            {% if beach.image %}
-                <img src="{{ beach.image.url }}" alt="{{ beach.name }}">
-            {% else %}
-                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80" alt="{{ beach.name }}">
-            {% endif %}
-            <div class="card-body">
-                <h2>{{ beach.name }}</h2>
-                <div class="meta">{{ beach.location }}</div>
-                <p>{{ beach.description|truncatechars:140 }}</p>
-                <div class="price">Ksh {{ beach.price }}</div>
-            </div>
-            <div class="card-actions">
-                <a href="{% url 'beach_detail' beach.id %}">View</a>
-                <a href="{% url 'book_beach' beach.id %}">Book</a>
-                <a href="{% url 'update_beach' beach.id %}">Edit</a>
-                <form method="POST" action="{% url 'delete_beach' beach.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Delete</button>
-                </form>
-            </div>
-        </article>
-    {% empty %}
-        <p style="padding:0 8%;">No beaches found. Add one now to get started.</p>
-    {% endfor %}
+    <a href="{% url 'create_beach' %}" class="add-btn">+ Add Beach</a>
+</div>
+
+<section id="beaches">
+    {% if beaches %}
+        <div class="grid">
+            {% for beach in beaches %}
+                <div class="card">
+                    {% if beach.image %}
+                        <img src="{{ beach.image.url }}" alt="{{ beach.name }}">
+                    {% else %}
+                        <div style="height: 240px; background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%); display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--text-muted); font-size: 14px;">🌊 No Image</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h2>{{ beach.name }}</h2>
+                        <div class="meta">
+                            <span>📍 {{ beach.location }}</span>
+                        </div>
+                        <p>{{ beach.description|truncatewords:15 }}</p>
+                        <div class="price">KES {{ beach.price }}/night</div>
+                        <p style="font-size: 13px; color: var(--text-muted);">
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            Activities: {{ beach.activities|truncatewords:3 }}
+                        </p>
+                        <div class="card-actions" style="margin-top: auto;">
+                            <a href="{% url 'beach_detail' beach.id %}">View</a>
+                            <a href="{% url 'book_beach' beach.id %}" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Book</a>
+                            <a href="{% url 'add_review' beach.id %}" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">Review</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>🏖️ No beaches found</h3>
+            <p>Start by adding your first beach to the platform.</p>
+            <br>
+            <a href="{% url 'create_beach' %}" class="add-btn">+ Add Your First Beach</a>
+        </div>
+    {% endif %}
 </section>
-<footer>© 2026 CoastExplorer | Built with Django</footer>
-</body>
-</html>
+
+{% endblock %}
