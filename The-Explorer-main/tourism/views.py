@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import BeachForm, BookingForm, ReviewForm, SignupForm, AttractionForm, AccommodationForm
-from .models import Beach, Booking, Review, TouristAttraction, Accommodation
+from .forms import BeachForm, BookingForm, ReviewForm, SignupForm, AttractionForm, AccommodationForm, TransportForm
+from .models import Beach, Booking, Review, TouristAttraction, Accommodation, Transport
 
 
 def signup_view(request):
@@ -242,6 +242,64 @@ def delete_accommodation(request, id):
         messages.success(request, 'Accommodation deleted successfully.')
         return redirect('accommodations')
     return render(request, 'confirm_delete.html', {'object': accommodation, 'type': 'accommodation'})
+
+
+@login_required
+def transports(request):
+    query = request.GET.get('q', '')
+    transport_type = request.GET.get('type', '')
+    transports_list = Transport.objects.all()
+
+    if query:
+        transports_list = transports_list.filter(name__icontains=query) | transports_list.filter(location__icontains=query)
+
+    if transport_type:
+        transports_list = transports_list.filter(transport_type=transport_type)
+
+    types = Transport.TRANSPORT_TYPE_CHOICES
+    return render(request, 'transports.html', {
+        'transports': transports_list,
+        'types': types,
+        'query': query,
+        'selected_type': transport_type,
+    })
+
+
+@login_required
+def transport_detail(request, id):
+    transport = get_object_or_404(Transport, id=id)
+    return render(request, 'transport_detail.html', {'transport': transport})
+
+
+@login_required
+def create_transport(request):
+    form = TransportForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Transport service added successfully.')
+        return redirect('transports')
+    return render(request, 'transport_form.html', {'form': form, 'title': 'Add Transport Service'})
+
+
+@login_required
+def update_transport(request, id):
+    transport = get_object_or_404(Transport, id=id)
+    form = TransportForm(request.POST or None, request.FILES or None, instance=transport)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Transport service updated successfully.')
+        return redirect('transport_detail', id=transport.id)
+    return render(request, 'transport_form.html', {'form': form, 'title': 'Edit Transport Service'})
+
+
+@login_required
+def delete_transport(request, id):
+    transport = get_object_or_404(Transport, id=id)
+    if request.method == 'POST':
+        transport.delete()
+        messages.success(request, 'Transport service deleted successfully.')
+        return redirect('transports')
+    return render(request, 'confirm_delete.html', {'object': transport, 'type': 'transport'})
 
 
 def logout_view(request):

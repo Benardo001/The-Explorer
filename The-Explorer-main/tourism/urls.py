@@ -23,4 +23,9 @@ urlpatterns = [
     path('accommodation/create/', views.create_accommodation, name='create_accommodation'),
     path('accommodation/update/<int:id>/', views.update_accommodation, name='update_accommodation'),
     path('accommodation/delete/<int:id>/', views.delete_accommodation, name='delete_accommodation'),
+    path('transports/', views.transports, name='transports'),
+    path('transport/<int:id>/', views.transport_detail, name='transport_detail'),
+    path('transport/create/', views.create_transport, name='create_transport'),
+    path('transport/update/<int:id>/', views.update_transport, name='update_transport'),
+    path('transport/delete/<int:id>/', views.delete_transport, name='delete_transport'),
 ]

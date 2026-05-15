@@ -102,3 +102,44 @@ class Accommodation(models.Model):
         if self.amenities:
             return [amenity.strip() for amenity in self.amenities.split(',')]
         return []
+
+
+class Transport(models.Model):
+    TRANSPORT_TYPE_CHOICES = [
+        ('bus', 'Bus'),
+        ('matatu', 'Matatu'),
+        ('taxi', 'Taxi'),
+        ('car_rental', 'Car Rental'),
+        ('motorcycle', 'Motorcycle'),
+        ('bicycle', 'Bicycle'),
+        ('boat', 'Boat'),
+        ('ferry', 'Ferry'),
+        ('train', 'Train'),
+        ('other', 'Other'),
+    ]
+
+    name = models.CharField(max_length=100)
+    transport_type = models.CharField(max_length=20, choices=TRANSPORT_TYPE_CHOICES)
+    description = models.TextField()
+    location = models.CharField(max_length=100, help_text="Base location or route")
+    destination = models.CharField(max_length=100, blank=True, help_text="If applicable")
+    price_per_trip = models.IntegerField(help_text="Price per trip or per hour")
+    price_unit = models.CharField(max_length=20, default="trip", help_text="e.g., trip, hour, day")
+    capacity = models.IntegerField(default=1, help_text="Number of passengers")
+    amenities = models.TextField(blank=True, help_text="Comma-separated list of amenities")
+    image = models.ImageField(upload_to='transport_images/', blank=True, null=True)
+    contact_info = models.CharField(max_length=200, blank=True)
+    website = models.URLField(blank=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    available_24_7 = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.name} ({self.get_transport_type_display()})"
+
+    def get_amenities_list(self):
+        """Return amenities as a list"""
+        if self.amenities:
+            return [amenity.strip() for amenity in self.amenities.split(',')]
+        return []

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Beach, Booking, Review, TouristAttraction, Accommodation
+from .models import Beach, Booking, Review, TouristAttraction, Accommodation, Transport
 
 
 class SignupForm(UserCreationForm):
@@ -109,4 +109,35 @@ class AccommodationForm(forms.ModelForm):
             'longitude': forms.NumberInput(attrs={'step': 'any'}),
             'contact_info': forms.TextInput(attrs={'placeholder': 'Phone or email'}),
             'website': forms.URLInput(attrs={'placeholder': 'https://example.com'}),
+        }
+
+
+class TransportForm(forms.ModelForm):
+    class Meta:
+        model = Transport
+        fields = [
+            'name',
+            'transport_type',
+            'description',
+            'location',
+            'destination',
+            'price_per_trip',
+            'price_unit',
+            'capacity',
+            'amenities',
+            'image',
+            'contact_info',
+            'website',
+            'latitude',
+            'longitude',
+            'available_24_7',
+        ]
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'amenities': forms.TextInput(attrs={'placeholder': 'e.g., AC, WiFi, Luggage space'}),
+            'latitude': forms.NumberInput(attrs={'step': 'any'}),
+            'longitude': forms.NumberInput(attrs={'step': 'any'}),
+            'contact_info': forms.TextInput(attrs={'placeholder': 'Phone or email'}),
+            'website': forms.URLInput(attrs={'placeholder': 'https://example.com'}),
+            'price_unit': forms.TextInput(attrs={'placeholder': 'e.g., trip, hour, day'}),
         }
