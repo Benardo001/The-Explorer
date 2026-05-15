@@ -1,0 +1,9 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'>
+  <rect width='100%' height='100%' fill='linearGradient' />
+  <g transform='translate(60,40)'>
+    <circle cx='200' cy='200' r='120' fill='#ffedd5' />
+    <rect x='380' y='140' width='560' height='240' rx='12' fill='#e8f6ff' />
+    <text x='60' y='60' font-size='42' fill='#0b3a53' font-family='Arial' font-weight='700'>Attraction Photo</text>
+    <text x='60' y='100' font-size='16' fill='#6b7b86'>Placeholder for parks, historical sites, and points of interest</text>
+  </g>
+</svg>

@@ -1,0 +1,6 @@
+[
+  {"model":"Beach","id":1,"url":"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"},
+  {"model":"Transport","id":1,"url":"https://images.unsplash.com/photo-1541447271230-7d6c9b9b1e2f?auto=format&fit=crop&w=1200&q=80"},
+  {"model":"Accommodation","id":1,"url":"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80"},
+  {"model":"TouristAttraction","id":1,"url":"https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80"}
+]
