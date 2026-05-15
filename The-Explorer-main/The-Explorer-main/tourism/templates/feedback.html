@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Feedback | CoastExplorer{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <div id="feedback-alert" class="alert-banner" role="status" aria-live="polite"></div>
+    <h2 style="margin-bottom:10px;">Share Your Feedback</h2>
+    <p class="form-help">We value your opinion. Tell us what you liked or how we can improve CoastExplorer.</p>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.rating }}
+        <div style="margin-top:18px;">
+            <label class="form-label">Rating</label>
+            <div id="star-rating" style="font-size:22px; color:#e2e8f0;" role="radiogroup" aria-label="Rating">
+                <button type="button" class="star star-anim" data-value="1" aria-label="1 star" role="radio" aria-checked="false">☆</button>
+                <button type="button" class="star star-anim" data-value="2" aria-label="2 stars" role="radio" aria-checked="false">☆</button>
+                <button type="button" class="star star-anim" data-value="3" aria-label="3 stars" role="radio" aria-checked="false">☆</button>
+                <button type="button" class="star star-anim" data-value="4" aria-label="4 stars" role="radio" aria-checked="false">☆</button>
+                <button type="button" class="star star-anim" data-value="5" aria-label="5 stars" role="radio" aria-checked="false">☆</button>
+            </div>
+            {% if form.rating.errors %}<div class="text-danger">{{ form.rating.errors }}</div>{% endif %}
+        </div>
+
+        <div style="margin-top:14px;">
+            <label class="form-label">Comments</label>
+            {{ form.comment }}
+            {% if form.comment.errors %}<div class="text-danger">{{ form.comment.errors }}</div>{% endif %}
+        </div>
+
+        <div style="margin-top:18px; text-align:right;">
+            <button id="feedback-submit" type="submit" class="btn-primary-custom">Submit Feedback</button>
+        </div>
+    </form>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const stars = document.querySelectorAll('#star-rating .star');
+    const ratingInput = document.getElementById('id_rating');
+    function setRating(v){
+        ratingInput.value = v;
+        stars.forEach(s=>{
+            s.textContent = (parseInt(s.dataset.value) <= v) ? '★' : '☆';
+            s.style.color = (parseInt(s.dataset.value) <= v) ? '#ffb020' : '#e2e8f0';
+        });
+    }
+    stars.forEach(s=>{
+        s.style.cursor = 'pointer';
+        s.setAttribute('tabindex', '0');
+        s.addEventListener('click', function(){ setRating(parseInt(this.dataset.value)); });
+        s.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setRating(parseInt(this.dataset.value)); } });
+        s.addEventListener('mouseover', function(){
+            const v = parseInt(this.dataset.value);
+            stars.forEach(ss=> ss.textContent = (parseInt(ss.dataset.value) <= v) ? '★' : '☆');
+        });
+        s.addEventListener('mouseout', function(){ setRating(parseInt(ratingInput.value) || 0); });
+    });
+
+    // simple client-side validation
+    const form = document.querySelector('.form-card form');
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    if(form){
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            const comment = document.getElementById('id_comment');
+            const rating = parseInt(document.getElementById('id_rating').value || 0);
+            let errors = [];
+            if(rating < 1 || rating > 5) errors.push('Please select a rating between 1 and 5.');
+            if(!comment.value.trim()) errors.push('Please enter your comments.');
+            if(errors.length){ alert(errors.join('\n')); return; }
+
+            const formData = new FormData(form);
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData,
+            }).then(res=>res.json()).then(data=>{
+                const alertEl = document.getElementById('feedback-alert');
+                if(data && data.status === 'ok'){
+                    alertEl.textContent = data.message || 'Thank you for your feedback!';
+                    alertEl.className = 'alert-banner alert-success';
+                    alertEl.style.display = 'block';
+                    form.reset();
+                    setRating(0);
+                } else {
+                    alertEl.textContent = data.message || 'Failed to submit feedback.';
+                    alertEl.className = 'alert-banner alert-error';
+                    alertEl.style.display = 'block';
+                }
+                window.scrollTo({ top: alertEl.offsetTop - 20, behavior: 'smooth' });
+            }).catch(err=>{ console.error(err); alert('Failed to submit feedback.'); });
+        });
+    }
+});
+</script>
+{% endblock %}
+</div>
+{% endblock %}

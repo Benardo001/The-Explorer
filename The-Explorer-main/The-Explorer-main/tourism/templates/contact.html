@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us | CoastExplorer{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <div id="contact-alert" class="alert-banner" role="status" aria-live="polite"></div>
+    <h2 style="margin-bottom:10px;">Contact Us</h2>
+    <p class="form-help">Have a question or need help? Send us a message and we'll get back to you shortly.</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-row" style="margin-top:18px;">
+            <div class="form-col">
+                <label class="form-label">Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}<div class="text-danger">{{ form.name.errors }}</div>{% endif %}
+            </div>
+            <div class="form-col">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}<div class="text-danger">{{ form.email.errors }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div style="margin-top:14px;">
+            <label class="form-label">Subject</label>
+            {{ form.subject }}
+            {% if form.subject.errors %}<div class="text-danger">{{ form.subject.errors }}</div>{% endif %}
+        </div>
+
+        <div style="margin-top:14px;">
+            <label class="form-label">Message</label>
+            {{ form.message }}
+            {% if form.message.errors %}<div class="text-danger">{{ form.message.errors }}</div>{% endif %}
+        </div>
+
+        <div style="margin-top:18px; text-align:right;">
+            <button id="contact-submit" type="submit" class="btn-primary-custom">Send Message</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+// Simple client-side validation for contact form
+document.addEventListener('DOMContentLoaded', function(){
+    const form = document.querySelector('.form-card form');
+    if(!form) return;
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const name = document.getElementById('id_name');
+        const email = document.getElementById('id_email');
+        const subject = document.getElementById('id_subject');
+        const message = document.getElementById('id_message');
+        let errors = [];
+        const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        if(!name.value.trim()) errors.push('Please enter your name.');
+        if(!email.value.trim() || !emailRe.test(email.value)) errors.push('Please enter a valid email.');
+        if(!subject.value.trim()) errors.push('Please enter a subject.');
+        if(!message.value.trim()) errors.push('Please enter a message.');
+        if(errors.length){
+            alert(errors.join('\n'));
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: formData,
+        }).then(res => res.json()).then(data => {
+            const alertEl = document.getElementById('contact-alert');
+            if(data && data.status === 'ok'){
+                alertEl.textContent = data.message || 'Message sent successfully.';
+                alertEl.className = 'alert-banner alert-success';
+                alertEl.style.display = 'block';
+                form.reset();
+            } else {
+                alertEl.textContent = data.message || 'An error occurred. Please try again.';
+                alertEl.className = 'alert-banner alert-error';
+                alertEl.style.display = 'block';
+            }
+            window.scrollTo({ top: alertEl.offsetTop - 20, behavior: 'smooth' });
+        }).catch(err=>{
+            console.error(err);
+            const alertEl = document.getElementById('contact-alert');
+            alertEl.textContent = 'Failed to send message.';
+            alertEl.className = 'alert-banner alert-error';
+            alertEl.style.display = 'block';
+            window.scrollTo({ top: alertEl.offsetTop - 20, behavior: 'smooth' });
+        });
+    });
+});
+</script>
+{% endblock %}

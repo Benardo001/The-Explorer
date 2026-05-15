@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>{{ title }}</h1>
+
+            <form method="POST" enctype="multipart/form-data" class="mt-4">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}">Accommodation Name *</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <small class="form-text text-danger">{{ form.name.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.location.id_for_label }}">Location *</label>
+                    {{ form.location }}
+                    {% if form.location.errors %}
+                        <small class="form-text text-danger">{{ form.location.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.accommodation_type.id_for_label }}">Accommodation Type *</label>
+                    {{ form.accommodation_type }}
+                    {% if form.accommodation_type.errors %}
+                        <small class="form-text text-danger">{{ form.accommodation_type.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">Description *</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <small class="form-text text-danger">{{ form.description.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.price_per_night.id_for_label }}">Price per Night (KES) *</label>
+                        {{ form.price_per_night }}
+                        {% if form.price_per_night.errors %}
+                            <small class="form-text text-danger">{{ form.price_per_night.errors }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.max_guests.id_for_label }}">Maximum Guests *</label>
+                        {{ form.max_guests }}
+                        {% if form.max_guests.errors %}
+                            <small class="form-text text-danger">{{ form.max_guests.errors }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.amenities.id_for_label }}">Amenities</label>
+                    {{ form.amenities }}
+                    <small class="form-text text-muted">Comma-separated list of amenities (e.g., WiFi, Pool, Restaurant)</small>
+                    {% if form.amenities.errors %}
+                        <small class="form-text text-danger">{{ form.amenities.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.image.id_for_label }}">Image</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                        <small class="form-text text-danger">{{ form.image.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.latitude.id_for_label }}">Latitude</label>
+                        {{ form.latitude }}
+                        {% if form.latitude.errors %}
+                            <small class="form-text text-danger">{{ form.latitude.errors }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.longitude.id_for_label }}">Longitude</label>
+                        {{ form.longitude }}
+                        {% if form.longitude.errors %}
+                            <small class="form-text text-danger">{{ form.longitude.errors }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.contact_info.id_for_label }}">Contact Information</label>
+                    {{ form.contact_info }}
+                    <small class="form-text text-muted">Phone number or email address</small>
+                    {% if form.contact_info.errors %}
+                        <small class="form-text text-danger">{{ form.contact_info.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.website.id_for_label }}">Website</label>
+                    {{ form.website }}
+                    <small class="form-text text-muted">Full URL including https://</small>
+                    {% if form.website.errors %}
+                        <small class="form-text text-danger">{{ form.website.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="btn-group mt-4">
+                    <button type="submit" class="btn btn-primary">Save Accommodation</button>
+                    <a href="{% url 'accommodations' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    input[type="text"],
+    input[type="number"],
+    input[type="url"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}

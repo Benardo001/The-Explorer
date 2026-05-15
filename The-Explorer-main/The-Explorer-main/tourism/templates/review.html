@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review {{ beach.name }} | CoastExplorer</title>
+    <style>
+        :root {
+            --primary-blue: #0369a1;
+            --accent-cyan: #06b6d4;
+            --white: #ffffff;
+            --light-bg: #f8fafc;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-lg: 0 20px 60px rgba(15, 23, 42, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--text-dark);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .card {
+            max-width: 650px;
+            margin: auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        h1 {
+            margin-bottom: 28px;
+            color: var(--primary-blue);
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        label {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        textarea, input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            font-family: inherit;
+            background: var(--light-bg);
+            transition: all 0.3s ease;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            border-color: var(--accent-cyan);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(3, 105, 161, 0.3);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .back-link a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-link a:hover {
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>⭐ Leave a Review</h1>
+        <p style="color: var(--text-muted); margin-bottom: 24px;">Share your experience at {{ beach.name }}</p>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">✓ Submit Review</button>
+        </form>
+        <p class="back-link"><a href="{% url 'beach_detail' beach.id %}">← Back to Beach</a></p>
+    </div>
+</body>
+</html>

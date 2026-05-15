@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+
+{% block title %}Transport Services - CoastExplorer{% endblock %}
+
+{% block extra_css %}
+<style>
+    .section-header {
+        padding: 40px 5%;
+        text-align: center;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .section-header h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--primary-blue);
+        margin-bottom: 12px;
+    }
+
+    .section-header p {
+        color: var(--text-muted);
+        font-size: 16px;
+    }
+
+    .filters {
+        padding: 20px 5%;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .filters form {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .filters input,
+    .filters select {
+        padding: 10px 16px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        font-size: 14px;
+        min-width: 200px;
+    }
+
+    .filters input:focus,
+    .filters select:focus {
+        outline: none;
+        border-color: var(--accent-cyan);
+    }
+
+    .filters button {
+        padding: 10px 20px;
+        background: var(--primary-blue);
+        color: var(--white);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .filters button:hover {
+        background: var(--accent-cyan);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 5%;
+        color: var(--text-muted);
+    }
+
+    .empty-state h3 {
+        font-size: 24px;
+        color: var(--text-dark);
+        margin-bottom: 12px;
+    }
+
+    .add-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+        color: var(--white);
+        padding: 14px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+    }
+
+    .add-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 24px;
+        padding: 40px 5%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .card {
+        background: var(--white);
+        border-radius: 16px;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border);
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .card img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 24px;
+    }
+
+    .card h2 {
+        color: var(--primary-blue);
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .meta {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .badge {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--primary-blue) 100%);
+        color: var(--white);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .price {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--primary-blue);
+        margin: 12px 0;
+    }
+
+    .capacity {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    .card-actions a {
+        flex: 1;
+        padding: 10px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+        color: var(--white);
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+        background: var(--light-bg);
+        color: var(--primary-blue);
+        border: 2px solid var(--accent-cyan);
+    }
+
+    .btn-secondary:hover {
+        background: var(--accent-cyan);
+        color: var(--white);
+    }
+
+    .amenities-list {
+        margin: 12px 0;
+    }
+
+    .amenity-tag {
+        display: inline-block;
+        background: var(--light-bg);
+        color: var(--text-dark);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        margin: 2px 4px 2px 0;
+    }
+
+    @media (max-width: 768px) {
+        .grid {
+            grid-template-columns: 1fr;
+            padding: 20px 5%;
+        }
+
+        .filters {
+            padding: 20px 5%;
+        }
+
+        .filters form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filters input,
+        .filters select {
+            min-width: auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section-header">
+    <h2>🚗 Transport Services</h2>
+    <p>Find reliable transportation options for your coastal adventures</p>
+</section>
+
+<section class="filters">
+    <form method="GET">
+        <input type="text" name="q" placeholder="Search transports..." value="{{ query }}">
+        <select name="type">
+            <option value="">All Types</option>
+            {% for type_code, type_name in types %}
+                <option value="{{ type_code }}" {% if type_code == selected_type %}selected{% endif %}>{{ type_name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">🔍 Search</button>
+    </form>
+    <a href="{% url 'create_transport' %}" class="add-btn">+ Add Transport</a>
+</section>
+
+<section id="transports">
+    {% if transports %}
+        <div class="grid">
+            {% for transport in transports %}
+                <div class="card">
+                    {% if transport.image %}
+                        <img src="{{ transport.image.url }}" alt="{{ transport.name }}">
+                    {% else %}
+                        <div style="height: 240px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--text-muted); font-size: 14px;">🚗 No Image</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h2>{{ transport.name }}</h2>
+                        <div class="meta">
+                            <span>📍 {{ transport.location }}</span>
+                        </div>
+                        <div style="margin: 12px 0;">
+                            <span class="badge">{{ transport.get_transport_type_display }}</span>
+                        </div>
+                        {% if transport.destination %}
+                            <p style="font-size: 14px; color: var(--text-muted); margin: 8px 0;">
+                                To: {{ transport.destination }}
+                            </p>
+                        {% endif %}
+                        <div class="price">KES {{ transport.price_per_trip }}/{{ transport.price_unit }}</div>
+                        <div class="capacity">👥 Capacity: {{ transport.capacity }} passengers</div>
+                        {% if transport.amenities %}
+                            <div class="amenities-list">
+                                {% for amenity in transport.get_amenities_list %}
+                                    <span class="amenity-tag">{{ amenity }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="card-actions">
+                            <a href="{% url 'transport_detail' transport.id %}" class="btn-primary">Details</a>
+                            <a href="{% url 'update_transport' transport.id %}" class="btn-secondary">Edit</a>
+                            <a href="{% url 'delete_transport' transport.id %}" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white;">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No transport services found</h3>
+            <p>Be the first to add a transport service to help travelers get around!</p>
+            <a href="{% url 'create_transport' %}" class="add-btn">+ Add Transport Service</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
